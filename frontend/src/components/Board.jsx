@@ -63,7 +63,7 @@ const Board = ({socket, board, setBoard}) => {
 
   return (
     <Row justify="center" align="middle">
-      <Col span={20}>
+      <Col span={24}>
         <BingoRow socket={socket} cells={board.slice(0, 5)} />
         <BingoRow socket={socket} cells={board.slice(5, 10)} />
         <BingoRow socket={socket} cells={board.slice(10, 15)} />
