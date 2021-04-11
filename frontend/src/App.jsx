@@ -1,19 +1,19 @@
-import {Layout, Typography} from "antd";
+import {Layout} from "antd";
 import {useEffect, useState} from "react";
 import io from "socket.io-client";
 import "./App.css";
+import BingoHeader from "./components/BingoHeader";
 import Board from "./components/Board";
 import LoginModal from "./components/LoginModal";
 import WinningModal from "./components/WinningModal";
 
 const socket = io.connect("http://localhost:4000");
-const {Header, Content} = Layout;
-const {Title} = Typography;
+const {Content} = Layout;
 
 const App = () => {
   const [board, setBoard] = useState([]);
   const [username, setUsername] = useState("");
-  const [winners, setWinners] = useState(["a", "b"]);
+  const [winners, setWinners] = useState([]);
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
@@ -46,11 +46,7 @@ const App = () => {
         socket={socket}
       />
       <WinningModal showModal={gameOver} winners={winners} socket={socket} />
-      <Header>
-        <Title level={4} type="success">
-          Playing Bingo as {username}
-        </Title>
-      </Header>
+      <BingoHeader username={username} />
       <Content>
         <Board board={board} setBoard={setBoard} socket={socket} />
       </Content>
