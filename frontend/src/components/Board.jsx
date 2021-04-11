@@ -6,7 +6,7 @@ const {Text} = Typography;
 
 const BingoCell = ({item, socket}) => {
   const handleClick = () => {
-    socket.emit("setActive", {item});
+    socket.emit("fieldActivated", {item});
   };
 
   if (item.pos === 13) {
@@ -44,20 +44,20 @@ const BingoRow = ({cells, socket}) => {
 const Board = ({socket, board, setBoard}) => {
   // set board for new user
   useEffect(() => {
-    socket.on("setBoard", (board) => {
+    socket.on("boardSet", (board) => {
       setBoard(board);
     });
   }, [board, setBoard, socket]);
 
   // set new active field
   useEffect(() => {
-    socket.on("setActive", (id) => {
+    socket.on("fieldActivated", (id) => {
       setBoard(
         board.map((obj) => (obj.id === id ? {...obj, active: true} : obj))
       );
     });
     return () => {
-      socket.removeListener("setActive");
+      socket.removeListener("fieldActivated");
     };
   }, [board, setBoard, socket]);
 
