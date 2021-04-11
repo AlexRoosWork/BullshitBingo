@@ -1,5 +1,5 @@
+import {Input, Modal} from "antd";
 import {useState} from "react";
-import {Modal, Input} from "antd";
 
 const LoginModal = ({showModal, setUsername, socket}) => {
   const [name, setName] = useState();
