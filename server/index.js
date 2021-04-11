@@ -75,8 +75,6 @@ const checkCols = (board) => {
       rows += 1;
     }
   }
-
-  // console.log("cols: ", checkFive(slice));
 };
 
 const checkDiags = (board) => {
@@ -97,7 +95,6 @@ const checkDiags = (board) => {
   ) {
     return true;
   } else {
-    // console.log("checking diag:", board);
     return false;
   }
 };
@@ -112,7 +109,6 @@ const checkWinners = () => {
     let dWin = checkDiags(board);
     if (hWin | dWin | vWin) {
       let player = board[12].player;
-      console.log("Winner", player);
       winners.push(player);
     }
   });
@@ -129,7 +125,6 @@ io.on("connection", (socket) => {
   socket.on("newUser", ({name}) => {
     const board = getRandomBingoBoard(socket.id, name);
     onlineClients.push({id: socket.id, player: name});
-    console.log(onlineClients);
     allBoards.push(board);
     io.to(socket.id).emit("setBoard", board);
   });
@@ -150,10 +145,8 @@ io.on("connection", (socket) => {
 
   // User wants to play again after a win
   socket.on("playAgain", () => {
-    console.log("playing again");
     allBoards = [];
     // let clients = Array.from(onlineClients);
-    console.log(onlineClients);
     onlineClients.map((client) => {
       const board = getRandomBingoBoard(client.id, client.player);
       allBoards.push(board);
