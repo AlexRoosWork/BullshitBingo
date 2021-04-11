@@ -6,8 +6,11 @@ import BingoHeader from "./components/BingoHeader";
 import Board from "./components/Board";
 import LoginModal from "./components/LoginModal";
 import WinningModal from "./components/WinningModal";
+import PlayerList from "./components/PlayerList";
 
+// const socket = io.connect("http://bingo.alex-roos.work");
 const socket = io.connect("http://localhost:4000");
+
 const {Content} = Layout;
 
 const App = () => {
@@ -17,24 +20,23 @@ const App = () => {
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    socket.on("gotWinners", (winner) => {
+    socket.on("userWon", (winner) => {
       setWinners(winner);
       setGameOver(true);
     });
     return () => {
-      socket.removeListener("gotWinners");
+      socket.removeListener("userWon");
     };
   }, [setWinners, setGameOver]);
 
   useEffect(() => {
-    socket.on("playAgain", (newBoard) => {
-      console.log("new board: ", newBoard);
+    socket.on("rematchRequested", (newBoard) => {
       setGameOver(false);
       setWinners([]);
       setBoard(newBoard);
     });
     return () => {
-      socket.removeListener("playAgain");
+      socket.removeListener("rematchRequested");
     };
   }, [setGameOver, setWinners]);
 
@@ -49,6 +51,7 @@ const App = () => {
       <BingoHeader username={username} />
       <Content>
         <Board board={board} setBoard={setBoard} socket={socket} />
+        <PlayerList socket={socket} />
       </Content>
     </Layout>
   );
