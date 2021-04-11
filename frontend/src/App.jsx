@@ -16,13 +16,6 @@ const App = () => {
   const [winners, setWinners] = useState(["a", "b"]);
   const [gameOver, setGameOver] = useState(false);
 
-  // new user registers
-  // useEffect(() => {
-  //   socket.on("newUser", ({name}) => {
-  //     setUsername(name);
-  //   });
-  // });
-
   useEffect(() => {
     socket.on("gotWinners", (winner) => {
       setWinners(winner);
