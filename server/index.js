@@ -137,7 +137,7 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("boardSet", board);
 
     const playerNames = onlineClients.map((obj) => obj.player);
-    io.emit("getPlayers", playerNames);
+    io.emit("playersListed", playerNames);
   });
 
   // User sets field to active
