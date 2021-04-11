@@ -5,7 +5,7 @@ const LoginModal = ({showModal, setUsername, socket}) => {
   const [name, setName] = useState();
 
   const confirmName = () => {
-    socket.emit("newUser", {name});
+    socket.emit("userRegistered", {name});
     setUsername(name);
   };
 

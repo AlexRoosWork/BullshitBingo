@@ -1,7 +1,15 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const server = require("http").createServer(app);
+const path = require("path");
 const io = require("socket.io")(server, {
   cors: {origin: "http://localhost:3000"},
+});
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 // --- Bingo Logic
@@ -117,40 +125,38 @@ const checkWinners = () => {
   return winners;
 };
 
+// --- Socket IO
 let onlineClients = [];
 
-// --- Socket IO
 io.on("connection", (socket) => {
   // New user signs in
-  socket.on("newUser", ({name}) => {
+  socket.on("userRegistered", ({name}) => {
     const board = getRandomBingoBoard(socket.id, name);
     onlineClients.push({id: socket.id, player: name});
     allBoards.push(board);
-    io.to(socket.id).emit("setBoard", board);
+    io.to(socket.id).emit("boardSet", board);
+
+    const playerNames = onlineClients.map((obj) => obj.player);
+    io.emit("getPlayers", playerNames);
   });
 
   // User sets field to active
-  socket.on("setActive", ({item}) => {
-    if (item.pos !== 13) {
-      allBoards = updateAllBoards(item); // update the board state in the backend
-      const winners = checkWinners();
-      // const field = data.find((obj) => obj.id == item.id);
-      // field.active = true; // log the field
-      io.emit("setActive", item.id);
+  socket.on("fieldActivated", ({item}) => {
+    allBoards = updateAllBoards(item); // update the board state in the backend
+    const winners = checkWinners();
+    io.emit("fieldActivated", item.id);
 
-      // emit a winner if there is one
-      if (winners.length >= 1) io.emit("gotWinners", winners);
-    }
+    // emit a winner if there is one
+    if (winners.length >= 1) io.emit("userWon", winners);
   });
 
   // User wants to play again after a win
-  socket.on("playAgain", () => {
+  socket.on("rematchRequested", () => {
     allBoards = [];
-    // let clients = Array.from(onlineClients);
     onlineClients.map((client) => {
       const board = getRandomBingoBoard(client.id, client.player);
       allBoards.push(board);
-      io.to(client.id).emit("playAgain", board);
+      io.to(client.id).emit("rematchRequested", board);
     });
   });
 
@@ -159,6 +165,12 @@ io.on("connection", (socket) => {
     onlineClients = onlineClients.filter((user) => {
       user.id !== socket.id;
     });
+
+    // update player list upon rage quit
+    const playerNames = onlineClients.map((obj) => obj.player);
+    io.emit("playersListed", playerNames);
+
+    // make sure there is no board floating around
     if (onlineClients.length === 0) {
       allBoards = [];
     }

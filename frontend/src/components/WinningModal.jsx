@@ -4,7 +4,7 @@ const {Title} = Typography;
 
 const WinningModal = ({winners, showModal, socket}) => {
   const playAgain = () => {
-    socket.emit("playAgain");
+    socket.emit("rematchRequested");
   };
 
   return (
