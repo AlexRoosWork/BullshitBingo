@@ -55,7 +55,6 @@ const Board = ({socket, board, setBoard}) => {
       setBoard(
         board.map((obj) => (obj.id === id ? {...obj, active: true} : obj))
       );
-      console.log("ran effect hook: ", board);
     });
     return () => {
       socket.removeListener("setActive");
