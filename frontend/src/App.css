@@ -1,0 +1,30 @@
+@import "~antd/dist/antd.css";
+
+.grid-container {
+  height: 90vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 2rem;
+}
+
+.grid-item {
+  text-align: center;
+}
+
+.cell {
+  border: 1px solid black;
+  height: 15vh;
+  font-size: calc(1vw + 1vh);
+  word-wrap: break-word;
+  text-align: center;
+}
+.middle-cell {
+  border: 1px solid black;
+  height: 15vh;
+  font-size: calc(1vw + 1vh);
+  word-wrap: break-word;
+  text-align: center;
+  background: lightblue;
+}
