@@ -6,19 +6,25 @@ const {Text} = Typography;
 
 const BingoCell = ({item, socket}) => {
   const handleClick = () => {
-    console.log("emitting: ", item);
     socket.emit("setActive", {item});
   };
 
   if (item.pos === 13) {
     return (
-      <Col span={4} className="middle-cell" onClick={handleClick}>
+      <Col span={4} className="middle-cell cell">
         <Text>{item.description}</Text>
       </Col>
     );
   } else {
     return (
-      <Col span={4} className="cell" onClick={handleClick}>
+      <Col
+        span={4}
+        className="cell"
+        onClick={handleClick}
+        style={{
+          background: item.active ? "gray" : "white",
+        }}
+      >
         <Text delete={item.active}>{item.description}</Text>
       </Col>
     );
