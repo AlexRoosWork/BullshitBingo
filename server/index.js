@@ -3,8 +3,9 @@ const app = express();
 const server = require("http").createServer(app);
 const path = require("path");
 const io = require("socket.io")(server, {
-  cors: {origin: "http://localhost:3000"},
+  cors: {origin: "http://localhost:4000"},
 });
+const data = require("./data.js");
 
 app.use(express.static(path.join(__dirname, "build")));
 
@@ -14,10 +15,9 @@ app.get("/", function (req, res) {
 
 // --- Bingo Logic
 let allBoards = [];
-const data = require("./data.js");
 
 const getRandomBingoBoard = (id, name) => {
-  var items = [];
+  let items = [];
   let posCounter = 0;
   while (items.length < 25) {
     let random = Math.floor(Math.random() * data.length);
@@ -37,11 +37,10 @@ const getRandomBingoBoard = (id, name) => {
       items.push(item);
     }
   }
-  posCounter = 0;
   return items;
 };
 
-const updateAllBoards = (field) => {
+const setFieldActive = (field) => {
   return allBoards.map((board) =>
     board.map((obj) => (obj.id === field.id ? {...obj, active: true} : obj))
   );
@@ -49,13 +48,13 @@ const updateAllBoards = (field) => {
 
 const checkFive = (slice) => {
   let activeInRow = slice.filter((obj) => obj.active);
-  return activeInRow.length === 5 ? true : false;
+  return activeInRow.length === 5;
 };
 
 const checkRows = (board) => {
   let start = 0;
   let end = 5;
-  while (end < 25) {
+  while (end <= 25) {
     let slice = board.slice(start, end);
     if (checkFive(slice)) {
       return true;
@@ -102,20 +101,19 @@ const checkDiags = (board) => {
     board[20].active
   ) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 };
 
 const checkWinners = () => {
   // go through each board, return false or the id of the winner
-  let winners = [];
-  allBoards.map((board) => {
+  const winners = [];
+  allBoards.forEach((board) => {
     // check rows
     let hWin = checkRows(board);
     let vWin = checkCols(board);
     let dWin = checkDiags(board);
-    if (hWin | dWin | vWin) {
+    if (hWin || dWin || vWin) {
       let player = board[12].player;
       winners.push(player);
     }
@@ -142,7 +140,7 @@ io.on("connection", (socket) => {
 
   // User sets field to active
   socket.on("fieldActivated", ({item}) => {
-    allBoards = updateAllBoards(item); // update the board state in the backend
+    allBoards = setFieldActive(item); // update the board state in the backend
     const winners = checkWinners();
     io.emit("fieldActivated", item.id);
 
