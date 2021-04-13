@@ -2,20 +2,16 @@ import {Modal, Typography} from "antd";
 
 const {Title} = Typography;
 
-const WinningModal = ({winners, showModal, socket}) => {
-  const playAgain = () => {
-    socket.emit("rematchRequested");
-  };
-
+const WinningModal = ({winners, show, onPlayAgain}) => {
   return (
     <Modal
-      visible={showModal}
+      visible={show}
       title={<Title level={1}>🎉Winner winner🎉, chicken🐔 dinner🍜</Title>}
       okText="Play Again"
-      onOk={playAgain}
+      onOk={onPlayAgain}
     >
       {winners.map((winner) => (
-        <Title level={2} key={winner.name}>
+        <Title level={2} key={winner}>
           Player "{winner}" won the game!
         </Title>
       ))}

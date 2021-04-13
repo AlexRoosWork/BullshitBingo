@@ -1,6 +1,5 @@
 import {Col, Row, Typography} from "antd";
 import {useEffect} from "react";
-import "../App.css";
 
 const {Text} = Typography;
 
@@ -34,9 +33,9 @@ const BingoCell = ({item, socket}) => {
 const BingoRow = ({cells, socket}) => {
   return (
     <Row justify="center" align="middle" gutter={[14, 14]}>
-      {cells.map((cell, index) => {
-        return <BingoCell item={cell} key={index} socket={socket} />;
-      })}
+      {cells.map((cell, index) => (
+        <BingoCell item={cell} key={index} socket={socket} />
+      ))}
     </Row>
   );
 };
@@ -47,6 +46,9 @@ const Board = ({socket, board, setBoard}) => {
     socket.on("boardSet", (board) => {
       setBoard(board);
     });
+    return () => {
+      socket.off("boardSet");
+    };
   }, [board, setBoard, socket]);
 
   // set new active field
@@ -57,7 +59,7 @@ const Board = ({socket, board, setBoard}) => {
       );
     });
     return () => {
-      socket.removeListener("fieldActivated");
+      socket.off("fieldActivated");
     };
   }, [board, setBoard, socket]);
 

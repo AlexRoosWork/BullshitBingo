@@ -1,5 +1,4 @@
 import {Layout, Typography} from "antd";
-import "../App.css";
 
 const {Header} = Layout;
 const {Title} = Typography;
