@@ -6,7 +6,7 @@ const WinningModal = ({winners, show, onPlayAgain}) => {
   return (
     <Modal
       visible={show}
-      title={<Title level={1}>🎉Winner winner🎉, chicken🐔 dinner🍜</Title>}
+      title={<Title level={1}>🎶🎉The winner takes it all🎉🎵</Title>}
       okText="Play Again"
       onOk={onPlayAgain}
     >
