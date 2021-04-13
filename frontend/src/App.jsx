@@ -8,7 +8,7 @@ import WinningModal from "./components/WinningModal";
 import PlayerList from "./components/PlayerList";
 
 const {Content} = Layout;
-const socket = io.connect("http:bingo.alex-roos.work");
+const socket = io.connect("http://bingo.alex-roos.work");
 // const socket = io.connect("http://localhost:4000");
 
 const App = () => {
