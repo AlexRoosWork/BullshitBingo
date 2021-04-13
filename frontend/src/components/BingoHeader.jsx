@@ -7,7 +7,7 @@ const BingoHeader = ({username}) => {
   return (
     <Header>
       <Title level={4} className="text-center" style={{color: "white"}}>
-        Playing Bicoin Bullshit Bingo as {username}
+        Playing Bitcoin Bullshit Bingo as {username}
       </Title>
     </Header>
   );
