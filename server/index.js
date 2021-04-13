@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const path = require("path");
 const io = require("socket.io")(server, {
-  cors: {origin: "http://localhost:3000"},
+  cors: {origin: "http://localhost:4000"},
 });
 const data = require("./data.js");
 
